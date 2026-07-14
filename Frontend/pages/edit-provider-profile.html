@@ -29,6 +29,23 @@
 
       <div id="profile-form-wrapper" class="hidden">
         <div class="card mb-6">
+          <div class="card-header"><h3>Profile Photo</h3></div>
+          <div class="card-body">
+            <div style="display:flex;align-items:center;gap:var(--sp-6);">
+              <div id="ep-avatar-preview" style="width:120px;height:120px;border-radius:var(--radius-full);overflow:hidden;flex-shrink:0;display:flex;align-items:center;justify-content:center;background:var(--bg-secondary);">
+              </div>
+              <div>
+                <div class="form-group" style="margin-bottom:var(--sp-2);">
+                  <label for="ep-avatar" class="btn btn-ghost btn-sm" style="cursor:pointer;">Choose Photo</label>
+                  <input type="file" id="ep-avatar" accept="image/*" style="display:none;">
+                </div>
+                <div class="text-muted fs-sm">Optional. JPG, PNG. Max 5MB.</div>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <div class="card mb-6">
           <div class="card-header"><h3>Personal Info</h3></div>
           <div class="card-body">
             <div style="display:grid;grid-template-columns:1fr 1fr;gap:var(--sp-4);">

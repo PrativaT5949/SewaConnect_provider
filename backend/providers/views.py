@@ -64,7 +64,7 @@ class MyProviderProfileView(generics.GenericAPIView):
         except ProviderProfile.DoesNotExist:
             return error_response('Provider profile not found.', status=404)
 
-        user_fields = ['first_name', 'last_name', 'phone_number', 'address', 'latitude', 'longitude', 'city', 'district']
+        user_fields = ['first_name', 'last_name', 'phone_number', 'address', 'latitude', 'longitude', 'city', 'district', 'avatar']
         user_data = {k: v for k, v in request.data.items() if k in user_fields and v is not None}
         if user_data:
             user = request.user

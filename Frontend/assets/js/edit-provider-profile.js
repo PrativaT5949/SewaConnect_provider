@@ -19,6 +19,8 @@
   const addressInput = document.getElementById('ep-address');
   const latInput = document.getElementById('ep-latitude');
   const lonInput = document.getElementById('ep-longitude');
+  const avatarInput = document.getElementById('ep-avatar');
+  const avatarPreview = document.getElementById('ep-avatar-preview');
   const citizenshipInput = document.getElementById('ep-citizenship');
   const certificateInput = document.getElementById('ep-certificate');
   const citizenshipPreview = document.getElementById('ep-citizenship-preview');
@@ -66,6 +68,12 @@
     lastNameInput.value = data.last_name || '';
     phoneInput.value = data.phone || data.phone_number || '';
 
+    if (data.avatar) {
+      avatarPreview.innerHTML = `<img src="${mediaUrl(data.avatar)}" style="width:120px;height:120px;border-radius:var(--radius-full);object-fit:cover;">`;
+    } else {
+      avatarPreview.innerHTML = `<div style="width:120px;height:120px;border-radius:var(--radius-full);display:flex;align-items:center;justify-content:center;font-size:2.5rem;">&#128100;</div>`;
+    }
+
     const providerData = await apiFetch('/providers/profile/');
     if (providerData && !providerData.error) {
       bioInput.value = providerData.bio || providerData.about || '';
@@ -104,6 +112,12 @@
     getLocationBtn.addEventListener('click', handleGetLocation);
     citizenshipInput.addEventListener('change', () => handleFilePreview(citizenshipInput, citizenshipPreview));
     certificateInput.addEventListener('change', () => handleFilePreview(certificateInput, certificatePreview));
+    avatarInput.addEventListener('change', () => {
+      if (avatarInput.files && avatarInput.files[0]) {
+        const url = URL.createObjectURL(avatarInput.files[0]);
+        avatarPreview.innerHTML = `<img src="${url}" style="width:120px;height:120px;border-radius:var(--radius-full);object-fit:cover;">`;
+      }
+    });
   }
 
   function handleFilePreview(input, container) {
@@ -161,8 +175,9 @@
     });
 
     if (data && !data.error) {
-      if (citizenshipInput.files.length || certificateInput.files.length) {
+      if (avatarInput.files.length || citizenshipInput.files.length || certificateInput.files.length) {
         const formData = new FormData();
+        if (avatarInput.files.length) formData.append('avatar', avatarInput.files[0]);
         if (citizenshipInput.files.length) formData.append('citizenship_image', citizenshipInput.files[0]);
         if (certificateInput.files.length) formData.append('certificate_image', certificateInput.files[0]);
         const token = getToken();

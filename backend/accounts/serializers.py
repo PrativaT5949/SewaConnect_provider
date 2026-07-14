@@ -1,3 +1,5 @@
+import re
+
 from rest_framework import serializers
 from django.contrib.auth import get_user_model
 from django.contrib.auth.password_validation import validate_password
@@ -38,13 +40,26 @@ class RegisterSerializer(serializers.ModelSerializer):
     class Meta:
         model = User
         fields = [
-            'email', 'first_name', 'last_name', 'phone_number',
-            'password', 'password_confirm',
+            'email',
+            'first_name',
+            'last_name',
+            'phone_number',
+            'password',
+            'password_confirm',
         ]
+
+    def validate_phone_number(self, value):
+        if not re.fullmatch(r'^(98|97|96)\d{8}$', value):
+            raise serializers.ValidationError(
+                "Enter a valid 10-digit Nepal phone number."
+            )
+        return value
 
     def validate(self, attrs):
         if attrs['password'] != attrs['password_confirm']:
-            raise serializers.ValidationError({'password_confirm': 'Passwords do not match.'})
+            raise serializers.ValidationError({
+                'password_confirm': 'Passwords do not match.'
+            })
         return attrs
 
     def create(self, validated_data):
@@ -59,13 +74,26 @@ class RegisterProviderSerializer(serializers.ModelSerializer):
     class Meta:
         model = User
         fields = [
-            'email', 'first_name', 'last_name', 'phone_number',
-            'password', 'password_confirm',
+            'email',
+            'first_name',
+            'last_name',
+            'phone_number',
+            'password',
+            'password_confirm',
         ]
+
+    def validate_phone_number(self, value):
+        if not re.fullmatch(r'^(98|97|96)\d{8}$', value):
+            raise serializers.ValidationError(
+                "Enter a valid 10-digit Nepal phone number."
+            )
+        return value
 
     def validate(self, attrs):
         if attrs['password'] != attrs['password_confirm']:
-            raise serializers.ValidationError({'password_confirm': 'Passwords do not match.'})
+            raise serializers.ValidationError({
+                'password_confirm': 'Passwords do not match.'
+            })
         return attrs
 
     def create(self, validated_data):
@@ -84,5 +112,7 @@ class ChangePasswordSerializer(serializers.Serializer):
 
     def validate_old_password(self, value):
         if not self.context['request'].user.check_password(value):
-            raise serializers.ValidationError('Current password is incorrect.')
+            raise serializers.ValidationError(
+                'Current password is incorrect.'
+            )
         return value

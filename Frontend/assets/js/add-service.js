@@ -119,7 +119,7 @@
       estimated_duration: duration ? Number(duration) : null,
     };
 
-    const data = await apiFetch("/services/", {
+    const data = await apiFetch("/services/create/", {
       method: "POST",
       body: JSON.stringify(payload),
     });

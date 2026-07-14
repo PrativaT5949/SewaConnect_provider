@@ -20,6 +20,7 @@
   const locationStatus = document.getElementById("prov-location-status");
   const citizenship = document.getElementById("prov-citizenship");
   const certificate = document.getElementById("prov-certificate");
+  const avatarInput = document.getElementById("provider-avatar");
   const terms = document.getElementById("prov-terms");
   const errorBox = document.getElementById("provider-error");
   const submitBtn = document.getElementById("prov-submit");
@@ -260,17 +261,36 @@
         return;
       }
 
-      /* Step 4: Update user location fields */
-      const userPayload = {};
-      if (address.value.trim()) userPayload.address = address.value.trim();
-      if (latInput.value) userPayload.latitude = parseFloat(latInput.value);
-      if (lonInput.value) userPayload.longitude = parseFloat(lonInput.value);
+      /* Step 4: Update user location fields and avatar */
+      const hasAvatar = avatarInput.files && avatarInput.files[0];
 
-      if (Object.keys(userPayload).length > 0) {
-        await apiFetch("/auth/me/", {
+      if (hasAvatar) {
+        const userFormData = new FormData();
+        if (address.value.trim()) userFormData.append("address", address.value.trim());
+        if (latInput.value) userFormData.append("latitude", latInput.value);
+        if (lonInput.value) userFormData.append("longitude", lonInput.value);
+        userFormData.append("avatar", avatarInput.files[0]);
+
+        const token = getToken();
+        await fetch(`${API_BASE}/auth/me/`, {
           method: "PATCH",
-          body: JSON.stringify(userPayload),
+          headers: {
+            Authorization: `Bearer ${token}`,
+          },
+          body: userFormData,
         });
+      } else {
+        const userPayload = {};
+        if (address.value.trim()) userPayload.address = address.value.trim();
+        if (latInput.value) userPayload.latitude = parseFloat(latInput.value);
+        if (lonInput.value) userPayload.longitude = parseFloat(lonInput.value);
+
+        if (Object.keys(userPayload).length > 0) {
+          await apiFetch("/auth/me/", {
+            method: "PATCH",
+            body: JSON.stringify(userPayload),
+          });
+        }
       }
 
       showToast(

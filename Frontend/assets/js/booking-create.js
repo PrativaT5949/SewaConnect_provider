@@ -14,6 +14,7 @@
   const addressInput = document.getElementById("booking-address");
   const latInput = document.getElementById("booking-latitude");
   const lonInput = document.getElementById("booking-longitude");
+  const searchInput = document.getElementById("location-search");
   const notesInput = document.getElementById("booking-notes");
   const priceDisplay = document.getElementById("booking-price");
   const submitBtn = document.getElementById("booking-submit");
@@ -25,10 +26,45 @@
   let services = [];
   let providers = [];
   let selectedServicePrice = 0;
+  let map;
+  let marker;
+
+  function initMap() {
+    map = L.map("booking-map").setView([27.7172, 85.324], 13); // Kathmandu
+
+    L.tileLayer("https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png", {
+      attribution: "&copy; OpenStreetMap contributors",
+    }).addTo(map);
+
+    map.on("click", async function (e) {
+      const { lat, lng } = e.latlng;
+
+      if (marker) {
+        marker.setLatLng(e.latlng);
+      } else {
+        marker = L.marker(e.latlng, { draggable: true }).addTo(map);
+
+        marker.on("dragend", async function () {
+          const pos = marker.getLatLng();
+          latInput.value = pos.lat.toFixed(6);
+          lonInput.value = pos.lng.toFixed(6);
+          const addr = await reverseGeocode(pos.lat, pos.lng);
+          if (addr) addressInput.value = addr;
+        });
+      }
+
+      latInput.value = lat.toFixed(6);
+      lonInput.value = lng.toFixed(6);
+
+      const address = await reverseGeocode(lat, lng);
+      if (address) addressInput.value = address;
+    });
+  }
 
   async function init() {
     setMinDate();
     loadUrlParams();
+    initMap();
     await loadCategories();
     setupEvents();
   }
@@ -164,12 +200,27 @@
 
       const pos = await getCurrentPosition();
       if (pos) {
-        latInput.value = pos.lat;
-        lonInput.value = pos.lon;
-        const address = await reverseGeocode(pos.lat, pos.lon);
-        if (address) {
-          addressInput.value = address;
+        latInput.value = Number(pos.lat).toFixed(6);
+        lonInput.value = Number(pos.lon).toFixed(6);
+
+        map.setView([pos.lat, pos.lon], 16);
+
+        if (marker) {
+          marker.setLatLng([pos.lat, pos.lon]);
+        } else {
+          marker = L.marker([pos.lat, pos.lon], { draggable: true }).addTo(map);
+          marker.on("dragend", async function () {
+            const p = marker.getLatLng();
+            latInput.value = p.lat.toFixed(6);
+            lonInput.value = p.lng.toFixed(6);
+            const addr = await reverseGeocode(p.lat, p.lng);
+            if (addr) addressInput.value = addr;
+          });
         }
+
+        const address = await reverseGeocode(pos.lat, pos.lon);
+        if (address) addressInput.value = address;
+
         showToast("Location retrieved successfully.", "success");
       } else {
         showToast(
@@ -179,7 +230,51 @@
       }
 
       getLocationBtn.disabled = false;
-      getLocationBtn.innerHTML = "&#128205; Get My Location";
+      getLocationBtn.innerHTML = "&#128205; Use My Current Location";
+    });
+    async function handleSearch() {
+      const query = searchInput.value.trim();
+      if (!query) return;
+
+      const places = await searchLocation(query);
+
+      if (!places.length) {
+        showToast("Location not found.", "warning");
+        return;
+      }
+
+      const place = places[0];
+      const lat = Number(place.lat);
+      const lon = Number(place.lon);
+
+      addressInput.value = place.display_name;
+      latInput.value = lat.toFixed(6);
+      lonInput.value = lon.toFixed(6);
+
+      map.setView([lat, lon], 16);
+
+      if (marker) {
+        marker.setLatLng([lat, lon]);
+      } else {
+        marker = L.marker([lat, lon], { draggable: true }).addTo(map);
+        marker.on("dragend", async function () {
+          const p = marker.getLatLng();
+          latInput.value = p.lat.toFixed(6);
+          lonInput.value = p.lng.toFixed(6);
+          const addr = await reverseGeocode(p.lat, p.lng);
+          if (addr) addressInput.value = addr;
+        });
+      }
+
+      showToast("Location selected.", "success");
+    }
+
+    searchInput.addEventListener("change", handleSearch);
+    searchInput.addEventListener("keydown", (e) => {
+      if (e.key === "Enter") {
+        e.preventDefault();
+        handleSearch();
+      }
     });
 
     form.addEventListener("submit", handleSubmit);

@@ -201,6 +201,24 @@ async function reverseGeocode(lat, lon) {
     return null;
   }
 }
+async function searchLocation(query) {
+  try {
+    const res = await fetch(
+      `https://nominatim.openstreetmap.org/search?format=jsonv2&q=${encodeURIComponent(query)}&limit=5`,
+      {
+        headers: {
+          "Accept-Language": "en",
+        },
+      },
+    );
+
+    if (!res.ok) return [];
+
+    return await res.json();
+  } catch {
+    return [];
+  }
+}
 
 function haversineDistance(lat1, lon1, lat2, lon2) {
   const R = 6371;
