@@ -1,85 +1,137 @@
-<!DOCTYPE html>
+<!doctype html>
 <html lang="en">
-<head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Add Service — SewaConnect</title>
-  <link rel="preconnect" href="https://fonts.googleapis.com">
-  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-  <link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@400;500;600;700&family=DM+Sans:wght@400;500;700&display=swap" rel="stylesheet">
-  <link rel="stylesheet" href="../assets/css/style.css">
-</head>
-<body>
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Add Service — SewaConnect</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link
+      href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@400;500;600;700&family=DM+Sans:wght@400;500;700&display=swap"
+      rel="stylesheet"
+    />
+    <link rel="stylesheet" href="../assets/css/style.css" />
+  </head>
+  <body>
+    <div id="app-topbar"></div>
+    <div id="toast-container"></div>
+    <div id="modal-container"></div>
 
-  <div id="app-topbar"></div>
-  <div id="toast-container"></div>
-  <div id="modal-container"></div>
+    <main
+      class="page-content"
+      style="padding-top: var(--sp-10); padding-bottom: var(--sp-16)"
+    >
+      <div class="container container-sm">
+        <div class="page-header">
+          <h1 class="page-title">Add New Service</h1>
+          <p class="page-subtitle">List a new service for customers to book</p>
+        </div>
 
-  <main class="page-content" style="padding-top:var(--sp-10);padding-bottom:var(--sp-16);">
-    <div class="container container-sm">
-
-      <div class="page-header">
-        <h1 class="page-title">Add New Service</h1>
-        <p class="page-subtitle">List a new service for customers to book</p>
-      </div>
-
-      <div class="card">
-        <div class="card-body">
-          <form id="add-service-form" novalidate>
-
-            <div class="form-group">
-              <label for="svc-category">Category *</label>
-              <select id="svc-category" class="form-select" required>
-                <option value="">Select a category</option>
-              </select>
-            </div>
-
-            <div class="form-group">
-              <label for="svc-title">Service Title *</label>
-              <input type="text" id="svc-title" class="form-input" placeholder="e.g. Deep Home Cleaning" required>
-            </div>
-
-            <div class="form-group">
-              <label for="svc-description">Description *</label>
-              <textarea id="svc-description" class="form-textarea" rows="4" placeholder="Describe your service in detail..." required></textarea>
-            </div>
-
-            <div style="display:grid;grid-template-columns:1fr 1fr;gap:var(--sp-4);">
+        <div class="card">
+          <div class="card-body">
+            <form id="add-service-form" novalidate>
               <div class="form-group">
-                <label for="svc-price">Price (Rs.) *</label>
-                <input type="number" id="svc-price" class="form-input" min="0" required>
-              </div>
-              <div class="form-group">
-                <label for="svc-price-type">Price Type *</label>
-                <select id="svc-price-type" class="form-select" required>
-                  <option value="fixed">Fixed Price</option>
-                  <option value="hourly">Per Hour</option>
-                  <option value="starting_at">Starting At</option>
+                <label for="svc-category">Category *</label>
+                <select id="svc-category" class="form-select" required>
+                  <option value="">Select a category</option>
                 </select>
               </div>
+
+              <div class="form-group">
+                <label for="svc-title">Service Title *</label>
+                <input
+                  type="text"
+                  id="svc-title"
+                  class="form-input"
+                  placeholder="e.g. Deep Home Cleaning"
+                  required
+                />
+              </div>
+
+              <div class="form-group">
+                <label for="svc-description">Description *</label>
+                <textarea
+                  id="svc-description"
+                  class="form-textarea"
+                  rows="4"
+                  placeholder="Describe your service in detail..."
+                  required
+                ></textarea>
+              </div>
+
+              <div
+                style="
+                  display: grid;
+                  grid-template-columns: 1fr 1fr;
+                  gap: var(--sp-4);
+                "
+              >
+                <div class="form-group">
+                  <label for="svc-price">Price (Rs.) *</label>
+                  <input
+                    type="number"
+                    id="svc-price"
+                    class="form-input"
+                    min="0"
+                    required
+                  />
+                </div>
+                <div class="form-group">
+                  <label for="svc-price-type">Price Type *</label>
+                  <select id="svc-price-type" class="form-select" required>
+                    <option value="fixed">Fixed Price</option>
+                    <option value="hourly">Per Hour</option>
+                    <option value="starting_at">Starting At</option>
+                  </select>
+                </div>
+              </div>
+
+              <div class="form-group">
+                <label for="svc-duration">Estimated Duration (minutes)</label>
+                <input
+                  type="number"
+                  id="svc-duration"
+                  class="form-input"
+                  min="15"
+                  step="15"
+                  placeholder="e.g. 60"
+                />
+              </div>
+
+              <button
+                type="submit"
+                class="btn btn-primary btn-lg w-full mt-4"
+                id="svc-submit"
+              >
+                <span id="svc-submit-text">Add Service</span>
+                <span id="svc-submit-spinner" class="spinner sm hidden"></span>
+              </button>
+            </form>
+          </div>
+        </div>
+
+        <div class="card mt-8">
+          <div class="card-header"><h3>My Services</h3></div>
+          <div class="card-body">
+            <div id="my-services-list">
+              <div
+                class="skeleton skeleton-card"
+                style="height: 60px; margin-bottom: var(--sp-3)"
+              ></div>
+              <div class="skeleton skeleton-card" style="height: 60px"></div>
             </div>
-
-            <div class="form-group">
-              <label for="svc-duration">Estimated Duration (minutes)</label>
-              <input type="number" id="svc-duration" class="form-input" min="15" step="15" placeholder="e.g. 60">
+            <div id="my-services-empty" class="hidden">
+              <p class="text-muted">You haven't added any services yet.</p>
             </div>
-
-            <button type="submit" class="btn btn-primary btn-lg w-full mt-4" id="svc-submit">
-              <span id="svc-submit-text">Add Service</span>
-              <span id="svc-submit-spinner" class="spinner sm hidden"></span>
-            </button>
-
-          </form>
+          </div>
         </div>
       </div>
+    </main>
 
-    </div>
-  </main>
+    <div id="app-footer"></div>
 
-  <div id="app-footer"></div>
-
-  <script src="../assets/js/api.js"></script>
-  <script src="../assets/js/components.js"></script>
-  <script src="../assets/js/add-service.js"></script>
-</body>
+    <script src="../assets/js/api.js"></script>
+    <script src="../assets/js/components.js"></script>
+    <script src="../assets/js/add-service.js"></script>
+  </body>
 </html>

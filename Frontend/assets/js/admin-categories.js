@@ -72,7 +72,7 @@
             <td style="font-size:1.5rem">${cat.icon || "🛠️"}</td>
             <td>${cat.name}</td>
             <td>${cat.description || "-"}</td>
-            <td>${cat.skills_count || 0}</td>
+            <td>${cat.services_count || 0}</td>
             <td>${cat.is_active ? "✅" : "❌"}</td>
             <td>
                 <button

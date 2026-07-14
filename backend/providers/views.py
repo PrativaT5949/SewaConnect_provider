@@ -63,9 +63,35 @@ class MyProviderProfileView(generics.GenericAPIView):
             profile = ProviderProfile.objects.get(user=request.user)
         except ProviderProfile.DoesNotExist:
             return error_response('Provider profile not found.', status=404)
-        serializer = ProviderProfileUpdateSerializer(profile, data=request.data, partial=True)
-        serializer.is_valid(raise_exception=True)
-        serializer.save()
+
+        user_fields = ['first_name', 'last_name', 'phone_number', 'address', 'latitude', 'longitude', 'city', 'district']
+        user_data = {k: v for k, v in request.data.items() if k in user_fields and v is not None}
+        if user_data:
+            user = request.user
+            for key, value in user_data.items():
+                setattr(user, key, value)
+            user.save()
+
+        working_days_data = request.data.get('working_days')
+        if working_days_data and isinstance(working_days_data, list):
+            from .models import ProviderWorkingDay
+            for day in working_days_data:
+                ProviderWorkingDay.objects.update_or_create(
+                    provider=profile,
+                    day=day,
+                    defaults={'is_available': True}
+                )
+
+        profile_fields = ['bio', 'tagline', 'experience_years', 'hourly_rate',
+                          'min_price', 'max_price', 'citizenship_image', 'certificate_image',
+                          'working_start_time', 'working_end_time']
+        profile_data = {k: v for k, v in request.data.items() if k in profile_fields}
+        if profile_data:
+            serializer = ProviderProfileUpdateSerializer(profile, data=profile_data, partial=True)
+            serializer.is_valid(raise_exception=True)
+            serializer.save()
+
+        profile.refresh_from_db()
         return success_response(
             data=ProviderProfileSerializer(profile).data,
             message='Profile updated successfully.',

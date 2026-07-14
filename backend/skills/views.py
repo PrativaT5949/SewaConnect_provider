@@ -42,6 +42,23 @@ class SkillCreateView(generics.CreateAPIView):
         )
 
 
+class SkillUpdateView(generics.UpdateAPIView):
+    queryset = Skill.objects.all()
+    serializer_class = SkillSerializer
+    permission_classes = [IsAdmin]
+
+    def update(self, request, *args, **kwargs):
+        partial = kwargs.pop('partial', False)
+        instance = self.get_object()
+        serializer = self.get_serializer(instance, data=request.data, partial=partial)
+        serializer.is_valid(raise_exception=True)
+        skill = serializer.save()
+        return success_response(
+            data=SkillSerializer(skill).data,
+            message='Skill updated successfully.',
+        )
+
+
 class SkillDeleteView(generics.DestroyAPIView):
     queryset = Skill.objects.all()
     permission_classes = [IsAdmin]

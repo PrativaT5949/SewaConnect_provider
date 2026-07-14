@@ -10,10 +10,10 @@ class BookingStatusLogInline(admin.TabularInline):
 
 @admin.register(Booking)
 class BookingAdmin(admin.ModelAdmin):
-    list_display = ['booking_code', 'customer', 'provider', 'status', 'booking_date', 'total_price', 'created_at']
+    list_display = ['booking_code', 'customer', 'provider', 'status', 'booking_date', 'total_price', 'assignment_attempt', 'created_at']
     list_filter = ['status', 'booking_date']
     search_fields = ['booking_code', 'customer__first_name', 'customer__last_name']
-    readonly_fields = ['booking_code', 'created_at', 'updated_at']
+    readonly_fields = ['booking_code', 'created_at', 'updated_at', 'assigned_at', 'assignment_expiry', 'assignment_attempt', 'tried_provider_ids']
     inlines = [BookingStatusLogInline]
 
 

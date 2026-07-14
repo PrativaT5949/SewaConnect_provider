@@ -13,6 +13,7 @@ class Booking(models.Model):
         ('in_progress', 'In Progress'),
         ('completed', 'Completed'),
         ('cancelled', 'Cancelled'),
+        ('waiting', 'Waiting'),
         ('review_pending', 'Review Pending'),
     ]
 
@@ -59,6 +60,11 @@ class Booking(models.Model):
     completed_at = models.DateTimeField(null=True, blank=True)
     created_at = models.DateTimeField(auto_now_add=True)
     updated_at = models.DateTimeField(auto_now=True)
+
+    assigned_at = models.DateTimeField(null=True, blank=True)
+    assignment_expiry = models.DateTimeField(null=True, blank=True, db_index=True)
+    assignment_attempt = models.PositiveIntegerField(default=0)
+    tried_provider_ids = models.JSONField(default=list, blank=True)
 
     class Meta:
         ordering = ['-created_at']

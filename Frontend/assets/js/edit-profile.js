@@ -89,10 +89,10 @@
     workEndInput.value = data.working_end_time || "17:00";
 
     if (data.citizenship_image) {
-      citizenshipPreview.innerHTML = `<img src="http://127.0.0.1:8000${data.citizenship_image}" style="max-width:200px;border-radius:var(--radius-sm);margin-top:var(--sp-2);">`;
+      citizenshipPreview.innerHTML = `<img src="${mediaUrl(data.citizenship_image)}" style="max-width:200px;border-radius:var(--radius-sm);margin-top:var(--sp-2);">`;
     }
     if (data.certificate_image) {
-      certificatePreview.innerHTML = `<img src="http://127.0.0.1:8000${data.certificate_image}" style="max-width:200px;border-radius:var(--radius-sm);margin-top:var(--sp-2);">`;
+      certificatePreview.innerHTML = `<img src="${mediaUrl(data.certificate_image)}" style="max-width:200px;border-radius:var(--radius-sm);margin-top:var(--sp-2);">`;
     }
   }
 
@@ -138,7 +138,7 @@
     const payload = {
       first_name: firstNameInput.value.trim(),
       last_name: lastNameInput.value.trim(),
-      phone: phoneInput.value.trim(),
+      phone_number: phoneInput.value.trim(),
       address: addressInput.value.trim(),
       city: cityInput.value.trim(),
       district: districtInput.value.trim(),
@@ -159,17 +159,22 @@
       data = await apiFetch("/providers/profile/", {
         method: "PATCH",
         body: JSON.stringify({
-          ...payload,
+          first_name: firstNameInput.value.trim(),
+          last_name: lastNameInput.value.trim(),
+          phone_number: phoneInput.value.trim(),
+          address: addressInput.value.trim(),
+          latitude: latInput.value ? Number(latInput.value) : null,
+          longitude: lonInput.value ? Number(lonInput.value) : null,
           bio: bioInput.value.trim(),
           tagline: taglineInput.value.trim(),
-          years_of_experience: experienceInput.value
+          experience_years: experienceInput.value
             ? Number(experienceInput.value)
             : null,
           hourly_rate: hourlyRateInput.value
             ? Number(hourlyRateInput.value)
             : null,
-          working_hours_start: workStartInput.value,
-          working_hours_end: workEndInput.value,
+          working_start_time: workStartInput.value,
+          working_end_time: workEndInput.value,
         }),
       });
     } else {

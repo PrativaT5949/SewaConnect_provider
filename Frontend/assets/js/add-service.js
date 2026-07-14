@@ -15,10 +15,67 @@
   const submitBtn = document.getElementById("svc-submit");
   const submitText = document.getElementById("svc-submit-text");
   const submitSpinner = document.getElementById("svc-submit-spinner");
+  const listEl = document.getElementById("my-services-list");
+  const emptyEl = document.getElementById("my-services-empty");
 
   async function init() {
     await loadCategories();
+    await loadMyServices();
     form.addEventListener("submit", handleSubmit);
+  }
+
+  async function loadMyServices() {
+    const data = await apiFetch("/services/my/");
+
+    if (!data || data.error) {
+      listEl.innerHTML = "";
+      listEl.classList.add("hidden");
+      emptyEl.classList.remove("hidden");
+      return;
+    }
+
+    const services = data.results || data.data || data || [];
+    if (!Array.isArray(services) || services.length === 0) {
+      listEl.innerHTML = "";
+      listEl.classList.add("hidden");
+      emptyEl.classList.remove("hidden");
+      return;
+    }
+
+    emptyEl.classList.add("hidden");
+    listEl.classList.remove("hidden");
+
+    listEl.innerHTML = services
+      .map(
+        (s) => `
+      <div style="display:flex;justify-content:space-between;align-items:center;padding:var(--sp-3) 0;border-bottom:1px solid var(--border);">
+        <div>
+          <div class="fw-600">${s.title || "Service"}</div>
+          <div class="text-muted fs-sm">${s.category_name || ""} &middot; ${formatCurrency(s.price)}${s.price_type === "hourly" ? "/hr" : ""}</div>
+        </div>
+        <button class="btn btn-sm btn-danger delete-service-btn" data-id="${s.id}">Delete</button>
+      </div>
+    `,
+      )
+      .join("");
+
+    document.querySelectorAll(".delete-service-btn").forEach((btn) => {
+      btn.onclick = () => handleDelete(Number(btn.dataset.id));
+    });
+  }
+
+  async function handleDelete(id) {
+    const ok = await showConfirm("Delete this service? This cannot be undone.");
+    if (!ok) return;
+
+    const data = await apiFetch(`/services/${id}/delete/`, {
+      method: "DELETE",
+    });
+
+    if (data === null || (data && !data.error)) {
+      showToast("Service deleted.", "success");
+      await loadMyServices();
+    }
   }
 
   async function loadCategories() {
@@ -56,15 +113,13 @@
     const payload = {
       category: Number(category),
       title: title,
-      description: description,
+      description,
       price: Number(price),
       price_type: priceType,
       estimated_duration: duration ? Number(duration) : null,
     };
 
-    console.log(payload);
-
-    const data = await apiFetch("/services/create/", {
+    const data = await apiFetch("/services/", {
       method: "POST",
       body: JSON.stringify(payload),
     });
@@ -73,9 +128,8 @@
 
     if (data && !data.error) {
       showToast("Service added successfully!", "success");
-      setTimeout(() => {
-        window.location.href = "profile.html";
-      }, 1000);
+      form.reset();
+      await loadMyServices();
     }
   }
 

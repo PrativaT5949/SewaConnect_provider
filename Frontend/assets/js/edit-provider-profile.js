@@ -79,10 +79,10 @@
       if (providerData.longitude) lonInput.value = providerData.longitude;
 
       if (providerData.citizenship_image) {
-        citizenshipPreview.innerHTML = `<img src="${providerData.citizenship_image}" style="max-width:200px;border-radius:var(--radius-sm);">`;
+        citizenshipPreview.innerHTML = `<img src="${mediaUrl(providerData.citizenship_image)}" style="max-width:200px;border-radius:var(--radius-sm);">`;
       }
       if (providerData.certificate_image) {
-        certificatePreview.innerHTML = `<img src="${providerData.certificate_image}" style="max-width:200px;border-radius:var(--radius-sm);">`;
+        certificatePreview.innerHTML = `<img src="${mediaUrl(providerData.certificate_image)}" style="max-width:200px;border-radius:var(--radius-sm);">`;
       }
 
       const days = providerData.working_days || [];
@@ -141,13 +141,13 @@
     const payload = {
       first_name: firstNameInput.value.trim(),
       last_name: lastNameInput.value.trim(),
-      phone: phoneInput.value.trim(),
+      phone_number: phoneInput.value.trim(),
       bio: bioInput.value.trim(),
       tagline: taglineInput.value.trim(),
-      years_of_experience: experienceInput.value ? Number(experienceInput.value) : null,
+      experience_years: experienceInput.value ? Number(experienceInput.value) : null,
       hourly_rate: hourlyRateInput.value ? Number(hourlyRateInput.value) : null,
-      working_hours_start: workStartInput.value,
-      working_hours_end: workEndInput.value,
+      working_start_time: workStartInput.value,
+      working_end_time: workEndInput.value,
       address: addressInput.value.trim(),
       working_days: Array.from(workingDays),
     };

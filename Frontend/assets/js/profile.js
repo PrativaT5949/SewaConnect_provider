@@ -60,7 +60,7 @@
     const role = user.role || "";
 
     avatarEl.innerHTML = avatar
-      ? `<img src="${avatar}" alt="${name}" class="avatar xl" style="width:100px;height:100px;margin:0 auto;border-radius:var(--radius-full);object-fit:cover;">`
+      ? `<img src="${mediaUrl(avatar)}" alt="${name}" class="avatar xl" style="width:100px;height:100px;margin:0 auto;border-radius:var(--radius-full);object-fit:cover;">`
       : `<div class="avatar xl" style="width:100px;height:100px;margin:0 auto;font-size:2.5rem;display:flex;align-items:center;justify-content:center;border-radius:var(--radius-full);">&#128100;</div>`;
 
     nameEl.textContent = name;

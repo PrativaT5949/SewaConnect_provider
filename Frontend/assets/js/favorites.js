@@ -54,7 +54,7 @@
           return `
             <div class="provider-card" data-provider-id="${providerId}">
               ${avatar
-                ? `<img class="provider-avatar" src="${avatar}" alt="${name}" loading="lazy">`
+                ? `<img class="provider-avatar" src="${mediaUrl(avatar)}" alt="${name}" loading="lazy">`
                 : `<div class="provider-avatar img-placeholder" style="font-size:2.5rem;display:flex;align-items:center;justify-content:center;height:200px;">&#128100;</div>`
               }
               <div class="provider-info">

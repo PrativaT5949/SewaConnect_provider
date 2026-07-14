@@ -1,0 +1,89 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Manage Skills — SewaConnect</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@400;500;600;700&family=DM+Sans:wght@400;500;700&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="../assets/css/style.css">
+</head>
+<body>
+
+  <div id="app-topbar"></div>
+  <div id="toast-container"></div>
+  <div id="modal-container"></div>
+
+  <main class="page-content" style="padding-top:var(--sp-10);padding-bottom:var(--sp-16);">
+    <div class="container">
+
+      <div class="page-header">
+        <h1 class="page-title">Manage Skills</h1>
+        <p class="page-subtitle">Add, edit, and manage skills within each category</p>
+      </div>
+
+      <div class="card mb-8">
+        <div class="card-header"><h3 id="add-edit-heading">Add New Skill</h3></div>
+        <div class="card-body">
+          <form id="skill-form" novalidate>
+            <input type="hidden" id="skill-edit-id" value="">
+            <div style="display:grid;grid-template-columns:1fr 1fr;gap:var(--sp-4);">
+              <div class="form-group">
+                <label for="skill-category">Category *</label>
+                <select id="skill-category" class="form-select" required>
+                  <option value="">Select a category</option>
+                </select>
+              </div>
+              <div class="form-group">
+                <label for="skill-name">Skill Name *</label>
+                <input type="text" id="skill-name" class="form-input" placeholder="e.g. Pipe Fitting" required>
+              </div>
+            </div>
+            <div class="form-group">
+              <label for="skill-description">Description</label>
+              <textarea id="skill-description" class="form-textarea" rows="2" placeholder="Brief description of the skill"></textarea>
+            </div>
+            <div class="flex gap-3">
+              <button type="submit" class="btn btn-primary" id="skill-submit">
+                <span id="skill-submit-text">Add Skill</span>
+              </button>
+              <button type="button" class="btn btn-ghost hidden" id="skill-cancel-edit">Cancel Edit</button>
+            </div>
+          </form>
+        </div>
+      </div>
+
+      <div class="card mb-6">
+        <div class="card-body" style="display:flex;align-items:center;gap:var(--sp-4);flex-wrap:wrap;">
+          <label for="skill-filter-category" class="fs-sm text-muted" style="margin:0;">Filter by category:</label>
+          <select id="skill-filter-category" class="form-select" style="max-width:280px;">
+            <option value="">All Categories</option>
+          </select>
+        </div>
+      </div>
+
+      <div id="skills-list">
+        <div class="skeleton skeleton-card" style="height:60px;margin-bottom:var(--sp-3)"></div>
+        <div class="skeleton skeleton-card" style="height:60px;margin-bottom:var(--sp-3)"></div>
+        <div class="skeleton skeleton-card" style="height:60px"></div>
+      </div>
+
+      <div id="empty-state" class="hidden">
+        <div class="empty-state">
+          <div class="empty-icon">&#128295;</div>
+          <h3 class="empty-title">No Skills Yet</h3>
+          <p class="empty-desc">Add your first skill above. Skills must belong to a category.</p>
+        </div>
+      </div>
+
+    </div>
+  </main>
+
+  <div id="app-footer"></div>
+
+  <script src="../assets/js/api.js"></script>
+  <script src="../assets/js/components.js"></script>
+  <script src="../assets/js/admin-skills.js"></script>
+</body>
+</html>

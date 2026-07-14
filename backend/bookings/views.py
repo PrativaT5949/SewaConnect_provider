@@ -1,5 +1,7 @@
 from rest_framework import generics, permissions
+from django.conf import settings
 from django.utils import timezone
+from datetime import timedelta
 from .models import Booking, BookingStatusLog
 from .serializers import BookingSerializer, BookingCreateSerializer, BookingActionSerializer
 from .services import (
@@ -75,7 +77,14 @@ class BookingCreateView(generics.CreateAPIView):
             changed_by=request.user,
         )
 
+        timeout_minutes = getattr(settings, 'BOOKING_ASSIGNMENT_TIMEOUT_MINUTES', 30)
+
         if provider:
+            booking.assignment_attempt = 1
+            booking.assigned_at = timezone.now()
+            booking.assignment_expiry = timezone.now() + timedelta(minutes=timeout_minutes)
+            booking.save()
+
             from notifications.utils import create_notification
             create_notification(
                 recipient=provider.user,

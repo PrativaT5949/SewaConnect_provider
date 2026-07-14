@@ -28,12 +28,14 @@ class BookingSerializer(serializers.ModelSerializer):
             'status', 'booking_date', 'booking_time', 'estimated_end_time',
             'address', 'latitude', 'longitude', 'note',
             'total_price', 'cancellation_reason',
+            'assigned_at', 'assignment_expiry', 'assignment_attempt',
             'completed_at', 'created_at', 'updated_at',
             'status_logs',
         ]
         read_only_fields = [
             'id', 'booking_code', 'customer', 'provider',
             'status', 'total_price', 'cancellation_reason',
+            'assigned_at', 'assignment_expiry', 'assignment_attempt',
             'completed_at', 'created_at', 'updated_at',
         ]
 
