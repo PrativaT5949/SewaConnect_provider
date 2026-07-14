@@ -1,0 +1,55 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Notifications — SewaConnect</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@400;500;600;700&family=DM+Sans:wght@400;500;700&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="../assets/css/style.css">
+</head>
+<body>
+
+  <div id="app-topbar"></div>
+  <div id="toast-container"></div>
+  <div id="modal-container"></div>
+
+  <main class="page-content" style="padding-top:var(--sp-10);padding-bottom:var(--sp-16);">
+    <div class="container container-sm">
+
+      <div class="page-header">
+        <div class="flex justify-between items-center">
+          <div>
+            <h1 class="page-title">Notifications</h1>
+            <p class="page-subtitle">Stay updated on your bookings and activities</p>
+          </div>
+          <button class="btn btn-ghost btn-sm" id="mark-all-read-btn">Mark All Read</button>
+        </div>
+      </div>
+
+      <div id="notifications-list">
+        <div class="skeleton skeleton-card" style="height:80px;margin-bottom:var(--sp-3)"></div>
+        <div class="skeleton skeleton-card" style="height:80px;margin-bottom:var(--sp-3)"></div>
+        <div class="skeleton skeleton-card" style="height:80px;margin-bottom:var(--sp-3)"></div>
+        <div class="skeleton skeleton-card" style="height:80px"></div>
+      </div>
+
+      <div id="empty-state" class="hidden">
+        <div class="empty-state">
+          <div class="empty-icon">&#128276;</div>
+          <h3 class="empty-title">No Notifications Yet</h3>
+          <p class="empty-desc">You'll see updates about your bookings and activities here.</p>
+        </div>
+      </div>
+
+    </div>
+  </main>
+
+  <div id="app-footer"></div>
+
+  <script src="../assets/js/api.js"></script>
+  <script src="../assets/js/components.js"></script>
+  <script src="../assets/js/notifications.js"></script>
+</body>
+</html>

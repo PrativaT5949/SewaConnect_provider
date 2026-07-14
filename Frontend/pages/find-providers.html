@@ -1,0 +1,120 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Find Providers — SewaConnect</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@400;500;600;700&family=DM+Sans:wght@400;500;700&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="../assets/css/style.css">
+</head>
+<body>
+
+  <div id="app-topbar"></div>
+  <div id="toast-container"></div>
+  <div id="modal-container"></div>
+
+  <main class="page-content" style="padding-top:var(--sp-8);padding-bottom:var(--sp-16);">
+    <div class="container">
+      <!-- Search Bar -->
+      <div class="search-bar" style="max-width:720px;margin:0 auto var(--sp-6);">
+        <span class="search-icon">&#128269;</span>
+        <input type="text" id="search-keyword" placeholder="Search providers by name, skill, or service..." aria-label="Search providers">
+        <button class="search-btn" id="search-btn">Search</button>
+      </div>
+
+      <!-- Filter Toggle -->
+      <div class="flex justify-between items-center mb-4" style="max-width:720px;margin-left:auto;margin-right:auto;">
+        <button class="btn btn-ghost btn-sm" id="toggle-filters">
+          &#9660; Filters
+        </button>
+        <div class="flex items-center gap-2">
+          <label for="sort-select" class="fs-sm text-muted">Sort by:</label>
+          <select id="sort-select" class="form-select" style="width:auto;padding:0.4rem 2rem 0.4rem 0.75rem;font-size:0.85rem;">
+            <option value="recommended">Recommended</option>
+            <option value="rating">Rating</option>
+            <option value="price_low">Price: Low to High</option>
+            <option value="price_high">Price: High to Low</option>
+            <option value="distance">Distance</option>
+          </select>
+        </div>
+      </div>
+
+      <!-- Filter Panel -->
+      <div class="filter-panel" id="filter-panel" style="max-width:720px;margin-left:auto;margin-right:auto;margin-bottom:var(--sp-6);">
+        <div class="filter-row">
+          <div class="filter-group">
+            <label for="filter-category">Category</label>
+            <select id="filter-category" class="form-select">
+              <option value="">All Categories</option>
+            </select>
+          </div>
+          <div class="filter-group">
+            <label for="filter-city">Location (City)</label>
+            <input type="text" id="filter-city" class="form-input" placeholder="e.g. Kathmandu">
+          </div>
+        </div>
+        <div class="filter-row mt-4">
+          <div class="filter-group">
+            <label for="filter-max-price">Max Price: <span id="filter-price-label">Rs. 5000</span></label>
+            <input type="range" id="filter-max-price" class="w-full" min="0" max="5000" step="100" value="5000">
+          </div>
+          <div class="filter-group">
+            <label for="filter-experience">Min Experience (Years)</label>
+            <select id="filter-experience" class="form-select">
+              <option value="">Any</option>
+              <option value="1">1+ years</option>
+              <option value="2">2+ years</option>
+              <option value="3">3+ years</option>
+              <option value="5">5+ years</option>
+              <option value="10">10+ years</option>
+            </select>
+          </div>
+          <div class="filter-group">
+            <label for="filter-availability">Availability</label>
+            <select id="filter-availability" class="form-select">
+              <option value="">Any</option>
+              <option value="today">Available Today</option>
+            </select>
+          </div>
+        </div>
+      </div>
+
+      <!-- Results Count -->
+      <div class="flex justify-between items-center mb-6" style="max-width:1100px;margin-left:auto;margin-right:auto;">
+        <p id="results-count" class="text-muted fs-sm">Loading providers...</p>
+      </div>
+
+      <!-- Results Grid -->
+      <div class="d-grid gap-6" id="results-grid" style="grid-template-columns:repeat(auto-fill,minmax(280px,1fr));max-width:1100px;margin:0 auto;">
+        <div class="skeleton skeleton-card"></div>
+        <div class="skeleton skeleton-card"></div>
+        <div class="skeleton skeleton-card"></div>
+        <div class="skeleton skeleton-card"></div>
+        <div class="skeleton skeleton-card"></div>
+        <div class="skeleton skeleton-card"></div>
+      </div>
+
+      <!-- Empty State -->
+      <div id="empty-state" class="hidden" style="max-width:1100px;margin:0 auto;">
+        <div class="empty-state">
+          <div class="empty-icon">&#128269;</div>
+          <h3 class="empty-title">No Providers Found</h3>
+          <p class="empty-desc">Try adjusting your filters or search terms to find what you're looking for.</p>
+          <button class="btn btn-primary mt-4" id="clear-filters-btn">Clear All Filters</button>
+        </div>
+      </div>
+
+      <!-- Pagination -->
+      <div class="pagination mt-8" id="pagination"></div>
+    </div>
+  </main>
+
+  <div id="app-footer"></div>
+
+  <script src="../assets/js/api.js"></script>
+  <script src="../assets/js/components.js"></script>
+  <script src="../assets/js/find-providers.js"></script>
+</body>
+</html>

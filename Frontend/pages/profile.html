@@ -1,0 +1,79 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>My Profile — SewaConnect</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@400;500;600;700&family=DM+Sans:wght@400;500;700&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="../assets/css/style.css">
+</head>
+<body>
+
+  <div id="app-topbar"></div>
+  <div id="toast-container"></div>
+  <div id="modal-container"></div>
+
+  <main class="page-content" style="padding-top:var(--sp-10);padding-bottom:var(--sp-16);">
+    <div class="container container-sm">
+
+      <div id="profile-loading">
+        <div class="skeleton skeleton-card" style="height:200px;margin-bottom:var(--sp-6)"></div>
+        <div class="skeleton skeleton-card" style="height:300px"></div>
+      </div>
+
+      <div id="profile-content" class="hidden">
+
+        <div class="card mb-6">
+          <div class="card-body text-center" style="padding:var(--sp-8);">
+            <div id="profile-avatar" style="margin-bottom:var(--sp-4);"></div>
+            <h2 id="profile-name" style="margin-bottom:var(--sp-1);"></h2>
+            <p class="text-muted" id="profile-email" style="margin-bottom:var(--sp-1);"></p>
+            <p class="text-muted fs-sm" id="profile-phone" style="margin-bottom:var(--sp-3);"></p>
+            <span id="profile-role-badge" class="badge"></span>
+
+            <div style="margin-top:var(--sp-6);">
+              <a href="edit-profile.html" class="btn btn-primary">Edit Profile</a>
+            </div>
+          </div>
+        </div>
+
+        <div id="provider-section" class="hidden">
+          <div class="card mb-6" id="provider-info-card">
+            <div class="card-header"><h3>Provider Information</h3></div>
+            <div class="card-body" id="provider-info-body"></div>
+          </div>
+
+          <div class="card mb-6" id="provider-skills-card">
+            <div class="card-header"><h3>Skills</h3></div>
+            <div class="card-body" id="provider-skills-body"></div>
+          </div>
+
+          <div class="card mb-6" id="provider-services-card">
+            <div class="card-header">
+              <div class="flex justify-between items-center">
+                <h3>Services</h3>
+                <a href="add-service.html" class="btn btn-ghost btn-sm">Manage Services</a>
+              </div>
+            </div>
+            <div class="card-body" id="provider-services-body"></div>
+          </div>
+
+          <div class="text-center mb-6">
+            <a href="add-skill.html" class="btn btn-outline">Add Skill</a>
+          </div>
+        </div>
+
+      </div>
+
+    </div>
+  </main>
+
+  <div id="app-footer"></div>
+
+  <script src="../assets/js/api.js"></script>
+  <script src="../assets/js/components.js"></script>
+  <script src="../assets/js/profile.js"></script>
+</body>
+</html>

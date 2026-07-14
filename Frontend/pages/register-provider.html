@@ -1,0 +1,265 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Become a Provider — SewaConnect</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link
+      href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@400;500;600;700&family=DM+Sans:wght@400;500;700&display=swap"
+      rel="stylesheet"
+    />
+    <link rel="stylesheet" href="../assets/css/style.css" />
+  </head>
+  <body>
+    <div id="app-topbar"></div>
+    <div id="toast-container"></div>
+    <div id="modal-container"></div>
+
+    <main
+      class="auth-page"
+      style="align-items: flex-start; padding-top: var(--sp-10)"
+    >
+      <div class="auth-card" style="max-width: 560px">
+        <div class="auth-header">
+          <div class="auth-logo">
+            Sewa<span class="brand-highlight">Connect</span>
+          </div>
+          <h2 class="auth-title">Become a Provider</h2>
+          <p class="auth-subtitle">Create your account and start earning</p>
+        </div>
+
+        <div
+          id="provider-error"
+          class="alert alert-danger hidden"
+          role="alert"
+        ></div>
+
+        <form id="provider-register-form" novalidate>
+          <!-- Account Info Section -->
+          <h4 style="margin-bottom: var(--sp-4); color: var(--text)">
+            Account Information
+          </h4>
+
+          <div class="d-grid gap-4" style="grid-template-columns: 1fr 1fr">
+            <div class="form-group">
+              <label for="prov-first-name">First Name</label>
+              <input
+                type="text"
+                id="prov-first-name"
+                class="form-input"
+                placeholder="John"
+                required
+              />
+            </div>
+            <div class="form-group">
+              <label for="prov-last-name">Last Name</label>
+              <input
+                type="text"
+                id="prov-last-name"
+                class="form-input"
+                placeholder="Doe"
+                required
+              />
+            </div>
+          </div>
+
+          <div class="form-group">
+            <label for="prov-email">Email Address</label>
+            <input
+              type="email"
+              id="prov-email"
+              class="form-input"
+              placeholder="john@example.com"
+              required
+              autocomplete="email"
+            />
+          </div>
+
+          <div class="form-group">
+            <label for="prov-phone">Phone Number</label>
+            <input
+              type="tel"
+              id="prov-phone"
+              class="form-input"
+              placeholder="+977-9800000000"
+              required
+            />
+          </div>
+
+          <div class="form-group">
+            <label for="prov-password">Password</label>
+            <input
+              type="password"
+              id="prov-password"
+              class="form-input"
+              placeholder="Min 8 characters"
+              required
+              autocomplete="new-password"
+            />
+            <div class="progress mt-2" style="height: 4px">
+              <div
+                class="progress-bar"
+                id="prov-strength-fill"
+                style="width: 0%"
+              ></div>
+            </div>
+            <small id="prov-strength-text" class="text-muted"></small>
+          </div>
+
+          <div class="form-group">
+            <label for="prov-confirm-password">Confirm Password</label>
+            <input
+              type="password"
+              id="prov-confirm-password"
+              class="form-input"
+              placeholder="Re-enter password"
+              required
+              autocomplete="new-password"
+            />
+          </div>
+
+          <hr class="divider" style="margin: var(--sp-6) 0" />
+
+          <!-- Profile Info Section -->
+          <h4 style="margin-bottom: var(--sp-4); color: var(--text)">
+            Profile Information
+          </h4>
+
+          <div class="form-group">
+            <label for="prov-tagline">Tagline</label>
+            <input
+              type="text"
+              id="prov-tagline"
+              class="form-input"
+              placeholder="e.g. Professional Plumber with 10 years experience"
+              maxlength="150"
+            />
+          </div>
+
+          <div class="form-group">
+            <label for="prov-bio">Bio</label>
+            <textarea
+              id="prov-bio"
+              class="form-textarea"
+              placeholder="Tell customers about yourself and your expertise..."
+              rows="4"
+            ></textarea>
+          </div>
+
+          <div class="d-grid gap-4" style="grid-template-columns: 1fr 1fr">
+            <div class="form-group">
+              <label for="prov-experience">Experience (Years)</label>
+              <input
+                type="number"
+                id="prov-experience"
+                class="form-input"
+                placeholder="0"
+                min="0"
+                max="60"
+              />
+            </div>
+            <div class="form-group">
+              <label for="prov-rate">Hourly Rate (Rs.)</label>
+              <input
+                type="number"
+                id="prov-rate"
+                class="form-input"
+                placeholder="500"
+                min="0"
+                required
+              />
+            </div>
+          </div>
+
+          <div class="form-group">
+            <label for="prov-address">Address</label>
+            <div class="d-flex gap-2">
+              <input
+                type="text"
+                id="prov-address"
+                class="form-input flex-1"
+                placeholder="Your address"
+                style="flex: 1"
+              />
+              <button
+                type="button"
+                class="btn btn-outline btn-sm"
+                id="prov-get-location"
+                style="white-space: nowrap; flex-shrink: 0"
+              >
+                &#128205; Get My Location
+              </button>
+            </div>
+            <input type="hidden" id="prov-lat" />
+            <input type="hidden" id="prov-lon" />
+            <small
+              id="prov-location-status"
+              class="text-muted mt-1 d-block"
+            ></small>
+          </div>
+
+          <hr class="divider" style="margin: var(--sp-6) 0" />
+
+          <!-- File Uploads -->
+          <h4 style="margin-bottom: var(--sp-4); color: var(--text)">
+            Documents
+          </h4>
+
+          <div class="d-grid gap-4" style="grid-template-columns: 1fr 1fr">
+            <div class="form-group">
+              <label for="prov-citizenship">Citizenship Image</label>
+              <input
+                type="file"
+                id="prov-citizenship"
+                class="form-input"
+                accept="image/*"
+                style="padding: 0.5rem"
+              />
+            </div>
+            <div class="form-group">
+              <label for="prov-certificate">Certificate Image</label>
+              <input
+                type="file"
+                id="prov-certificate"
+                class="form-input"
+                accept="image/*"
+                style="padding: 0.5rem"
+              />
+            </div>
+          </div>
+
+          <div class="form-group mt-4">
+            <label class="form-check">
+              <input type="checkbox" id="prov-terms" required />
+              <span class="fs-sm"
+                >I agree to the <a href="#">Terms of Service</a> and
+                <a href="#">Privacy Policy</a></span
+              >
+            </label>
+          </div>
+
+          <button
+            type="submit"
+            class="btn btn-primary w-full btn-lg mt-2"
+            id="prov-submit"
+          >
+            <span id="prov-btn-text">Become a Provider</span>
+            <span id="prov-btn-spinner" class="spinner sm hidden"></span>
+          </button>
+        </form>
+
+        <div class="auth-footer">
+          <p>Already have an account? <a href="login.html">Login</a></p>
+        </div>
+      </div>
+    </main>
+
+    <div id="app-footer"></div>
+
+    <script src="../assets/js/api.js"></script>
+    <script src="../assets/js/components.js"></script>
+    <script src="../assets/js/register-provider.js"></script>
+  </body>
+</html>

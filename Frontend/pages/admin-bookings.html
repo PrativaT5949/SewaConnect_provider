@@ -1,0 +1,79 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Manage Bookings — SewaConnect</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@400;500;600;700&family=DM+Sans:wght@400;500;700&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="../assets/css/style.css">
+</head>
+<body>
+
+  <div id="app-topbar"></div>
+  <div id="toast-container"></div>
+  <div id="modal-container"></div>
+
+  <main class="page-content" style="padding-top:var(--sp-10);padding-bottom:var(--sp-16);">
+    <div class="container">
+
+      <div class="page-header">
+        <h1 class="page-title">Manage Bookings</h1>
+        <p class="page-subtitle">View all platform bookings</p>
+      </div>
+
+      <div class="flex justify-between items-center mb-6 flex-wrap gap-3">
+        <div class="tabs" id="filter-tabs" style="border-bottom:none;margin-bottom:0;">
+          <button class="tab-link active" data-filter="">All</button>
+          <button class="tab-link" data-filter="pending">Pending</button>
+          <button class="tab-link" data-filter="accepted">Accepted</button>
+          <button class="tab-link" data-filter="completed">Completed</button>
+          <button class="tab-link" data-filter="cancelled">Cancelled</button>
+        </div>
+        <p id="bookings-count" class="text-muted fs-sm"></p>
+      </div>
+
+      <div id="bookings-table-wrapper">
+        <div class="table-wrapper">
+          <table class="table" id="bookings-table">
+            <thead>
+              <tr>
+                <th>Code</th>
+                <th>Customer</th>
+                <th>Provider</th>
+                <th>Category</th>
+                <th>Status</th>
+                <th>Date</th>
+                <th>Amount</th>
+              </tr>
+            </thead>
+            <tbody id="bookings-tbody">
+              <tr><td colspan="7" class="skeleton skeleton-card" style="height:50px"></td></tr>
+              <tr><td colspan="7" class="skeleton skeleton-card" style="height:50px"></td></tr>
+              <tr><td colspan="7" class="skeleton skeleton-card" style="height:50px"></td></tr>
+            </tbody>
+          </table>
+        </div>
+      </div>
+
+      <div id="empty-state" class="hidden">
+        <div class="empty-state">
+          <div class="empty-icon">&#128197;</div>
+          <h3 class="empty-title">No Bookings Found</h3>
+          <p class="empty-desc">No bookings match the current filter.</p>
+        </div>
+      </div>
+
+      <div class="pagination mt-8" id="pagination"></div>
+
+    </div>
+  </main>
+
+  <div id="app-footer"></div>
+
+  <script src="../assets/js/api.js"></script>
+  <script src="../assets/js/components.js"></script>
+  <script src="../assets/js/admin-bookings.js"></script>
+</body>
+</html>

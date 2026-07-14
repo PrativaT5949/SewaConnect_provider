@@ -1,0 +1,77 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Manage Users — SewaConnect</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@400;500;600;700&family=DM+Sans:wght@400;500;700&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="../assets/css/style.css">
+</head>
+<body>
+
+  <div id="app-topbar"></div>
+  <div id="toast-container"></div>
+  <div id="modal-container"></div>
+
+  <main class="page-content" style="padding-top:var(--sp-10);padding-bottom:var(--sp-16);">
+    <div class="container">
+
+      <div class="page-header">
+        <h1 class="page-title">Manage Users</h1>
+        <p class="page-subtitle">View and manage platform users</p>
+      </div>
+
+      <div class="flex justify-between items-center mb-6 flex-wrap gap-3">
+        <div class="tabs" id="filter-tabs" style="border-bottom:none;margin-bottom:0;">
+          <button class="tab-link active" data-filter="">All</button>
+          <button class="tab-link" data-filter="customer">Customers</button>
+          <button class="tab-link" data-filter="provider">Providers</button>
+          <button class="tab-link" data-filter="admin">Admins</button>
+        </div>
+        <p id="users-count" class="text-muted fs-sm"></p>
+      </div>
+
+      <div id="users-table-wrapper">
+        <div class="table-wrapper">
+          <table class="table" id="users-table">
+            <thead>
+              <tr>
+                <th>Name</th>
+                <th>Email</th>
+                <th>Phone</th>
+                <th>Role</th>
+                <th>Joined</th>
+                <th>Status</th>
+              </tr>
+            </thead>
+            <tbody id="users-tbody">
+              <tr><td colspan="6" class="skeleton skeleton-card" style="height:50px"></td></tr>
+              <tr><td colspan="6" class="skeleton skeleton-card" style="height:50px"></td></tr>
+              <tr><td colspan="6" class="skeleton skeleton-card" style="height:50px"></td></tr>
+            </tbody>
+          </table>
+        </div>
+      </div>
+
+      <div id="empty-state" class="hidden">
+        <div class="empty-state">
+          <div class="empty-icon">&#128101;</div>
+          <h3 class="empty-title">No Users Found</h3>
+          <p class="empty-desc">No users match the current filter.</p>
+        </div>
+      </div>
+
+      <div class="pagination mt-8" id="pagination"></div>
+
+    </div>
+  </main>
+
+  <div id="app-footer"></div>
+
+  <script src="../assets/js/api.js"></script>
+  <script src="../assets/js/components.js"></script>
+  <script src="../assets/js/admin-users.js"></script>
+</body>
+</html>

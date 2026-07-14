@@ -1,0 +1,75 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Reports — SewaConnect</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@400;500;600;700&family=DM+Sans:wght@400;500;700&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="../assets/css/style.css">
+</head>
+<body>
+
+  <div id="app-topbar"></div>
+  <div id="toast-container"></div>
+  <div id="modal-container"></div>
+
+  <main class="page-content" style="padding-top:var(--sp-10);padding-bottom:var(--sp-16);">
+    <div class="container">
+
+      <div class="page-header">
+        <h1 class="page-title">Reports</h1>
+        <p class="page-subtitle">Platform performance and insights</p>
+      </div>
+
+      <div class="dashboard-grid mb-8" id="revenue-stats">
+        <div class="skeleton skeleton-card" style="height:100px"></div>
+        <div class="skeleton skeleton-card" style="height:100px"></div>
+        <div class="skeleton skeleton-card" style="height:100px"></div>
+        <div class="skeleton skeleton-card" style="height:100px"></div>
+      </div>
+
+      <div style="display:grid;grid-template-columns:1fr 1fr;gap:var(--sp-6);" class="mb-8">
+        <div class="card">
+          <div class="card-header"><h3>Top Categories</h3></div>
+          <div class="card-body" id="top-categories">
+            <div class="skeleton skeleton-card" style="height:60px;margin-bottom:var(--sp-3)"></div>
+            <div class="skeleton skeleton-card" style="height:60px;margin-bottom:var(--sp-3)"></div>
+            <div class="skeleton skeleton-card" style="height:60px"></div>
+          </div>
+        </div>
+        <div class="card">
+          <div class="card-header"><h3>Top Providers</h3></div>
+          <div class="card-body" id="top-providers">
+            <div class="skeleton skeleton-card" style="height:60px;margin-bottom:var(--sp-3)"></div>
+            <div class="skeleton skeleton-card" style="height:60px;margin-bottom:var(--sp-3)"></div>
+            <div class="skeleton skeleton-card" style="height:60px"></div>
+          </div>
+        </div>
+      </div>
+
+      <div class="card mb-8">
+        <div class="card-header"><h3>User Growth</h3></div>
+        <div class="card-body" id="user-growth">
+          <div class="skeleton skeleton-card" style="height:150px"></div>
+        </div>
+      </div>
+
+      <div class="card">
+        <div class="card-header"><h3>Booking Trends</h3></div>
+        <div class="card-body" id="booking-trends">
+          <div class="skeleton skeleton-card" style="height:150px"></div>
+        </div>
+      </div>
+
+    </div>
+  </main>
+
+  <div id="app-footer"></div>
+
+  <script src="../assets/js/api.js"></script>
+  <script src="../assets/js/components.js"></script>
+  <script src="../assets/js/admin-reports.js"></script>
+</body>
+</html>

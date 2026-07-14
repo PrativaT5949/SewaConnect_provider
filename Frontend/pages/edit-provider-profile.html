@@ -1,0 +1,152 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Edit Provider Profile — SewaConnect</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@400;500;600;700&family=DM+Sans:wght@400;500;700&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="../assets/css/style.css">
+</head>
+<body>
+
+  <div id="app-topbar"></div>
+  <div id="toast-container"></div>
+  <div id="modal-container"></div>
+
+  <main class="page-content" style="padding-top:var(--sp-10);padding-bottom:var(--sp-16);">
+    <div class="container container-sm">
+
+      <div class="page-header">
+        <h1 class="page-title">Edit Provider Profile</h1>
+        <p class="page-subtitle">Manage your provider information</p>
+      </div>
+
+      <div id="profile-loading">
+        <div class="skeleton skeleton-card" style="height:500px"></div>
+      </div>
+
+      <div id="profile-form-wrapper" class="hidden">
+        <div class="card mb-6">
+          <div class="card-header"><h3>Personal Info</h3></div>
+          <div class="card-body">
+            <div style="display:grid;grid-template-columns:1fr 1fr;gap:var(--sp-4);">
+              <div class="form-group">
+                <label for="ep-first-name">First Name *</label>
+                <input type="text" id="ep-first-name" class="form-input" required>
+              </div>
+              <div class="form-group">
+                <label for="ep-last-name">Last Name *</label>
+                <input type="text" id="ep-last-name" class="form-input" required>
+              </div>
+            </div>
+            <div class="form-group">
+              <label for="ep-phone">Phone Number</label>
+              <input type="tel" id="ep-phone" class="form-input">
+            </div>
+          </div>
+        </div>
+
+        <div class="card mb-6">
+          <div class="card-header"><h3>Provider Details</h3></div>
+          <div class="card-body">
+            <div class="form-group">
+              <label for="ep-bio">Bio</label>
+              <textarea id="ep-bio" class="form-textarea" rows="4" placeholder="Describe your expertise..."></textarea>
+            </div>
+            <div class="form-group">
+              <label for="ep-tagline">Tagline</label>
+              <input type="text" id="ep-tagline" class="form-input" placeholder="A short professional tagline">
+            </div>
+            <div style="display:grid;grid-template-columns:1fr 1fr;gap:var(--sp-4);">
+              <div class="form-group">
+                <label for="ep-experience">Years of Experience</label>
+                <input type="number" id="ep-experience" class="form-input" min="0" max="50">
+              </div>
+              <div class="form-group">
+                <label for="ep-hourly-rate">Hourly Rate (Rs.)</label>
+                <input type="number" id="ep-hourly-rate" class="form-input" min="0">
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <div class="card mb-6">
+          <div class="card-header"><h3>Working Hours</h3></div>
+          <div class="card-body">
+            <div style="display:grid;grid-template-columns:1fr 1fr;gap:var(--sp-4);margin-bottom:var(--sp-4);">
+              <div class="form-group">
+                <label for="ep-work-start">Start Time</label>
+                <input type="time" id="ep-work-start" class="form-input" value="09:00">
+              </div>
+              <div class="form-group">
+                <label for="ep-work-end">End Time</label>
+                <input type="time" id="ep-work-end" class="form-input" value="17:00">
+              </div>
+            </div>
+            <div class="form-group">
+              <label>Working Days</label>
+              <div class="flex gap-3 flex-wrap mt-2" id="workdays-toggle">
+                <button type="button" class="chip" data-day="mon">Mon</button>
+                <button type="button" class="chip" data-day="tue">Tue</button>
+                <button type="button" class="chip" data-day="wed">Wed</button>
+                <button type="button" class="chip" data-day="thu">Thu</button>
+                <button type="button" class="chip" data-day="fri">Fri</button>
+                <button type="button" class="chip" data-day="sat">Sat</button>
+                <button type="button" class="chip" data-day="sun">Sun</button>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <div class="card mb-6">
+          <div class="card-header"><h3>Location</h3></div>
+          <div class="card-body">
+            <div class="form-group">
+              <label for="ep-address">Address</label>
+              <input type="text" id="ep-address" class="form-input" placeholder="Your business address">
+            </div>
+            <input type="hidden" id="ep-latitude" value="">
+            <input type="hidden" id="ep-longitude" value="">
+            <button type="button" class="btn btn-ghost btn-sm mb-4" id="ep-get-location">&#128205; Use My Current Location</button>
+          </div>
+        </div>
+
+        <div class="card mb-6">
+          <div class="card-header"><h3>Documents</h3></div>
+          <div class="card-body">
+            <div style="display:grid;grid-template-columns:1fr 1fr;gap:var(--sp-6);">
+              <div class="form-group">
+                <label for="ep-citizenship">Citizenship Image</label>
+                <input type="file" id="ep-citizenship" class="form-input" accept="image/*">
+                <div id="ep-citizenship-preview" class="mt-2"></div>
+              </div>
+              <div class="form-group">
+                <label for="ep-certificate">Certificate Image</label>
+                <input type="file" id="ep-certificate" class="form-input" accept="image/*">
+                <div id="ep-certificate-preview" class="mt-2"></div>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <div class="flex gap-3">
+          <button type="button" class="btn btn-primary btn-lg" id="ep-save-btn">
+            <span id="ep-save-text">Save Profile</span>
+            <span id="ep-save-spinner" class="spinner sm hidden"></span>
+          </button>
+          <button type="button" class="btn btn-ghost btn-lg" id="ep-cancel-btn">Cancel</button>
+        </div>
+      </div>
+
+    </div>
+  </main>
+
+  <div id="app-footer"></div>
+
+  <script src="../assets/js/api.js"></script>
+  <script src="../assets/js/components.js"></script>
+  <script src="../assets/js/edit-provider-profile.js"></script>
+</body>
+</html>

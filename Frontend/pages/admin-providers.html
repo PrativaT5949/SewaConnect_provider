@@ -1,0 +1,58 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Manage Providers — SewaConnect</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@400;500;600;700&family=DM+Sans:wght@400;500;700&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="../assets/css/style.css">
+</head>
+<body>
+
+  <div id="app-topbar"></div>
+  <div id="toast-container"></div>
+  <div id="modal-container"></div>
+
+  <main class="page-content" style="padding-top:var(--sp-10);padding-bottom:var(--sp-16);">
+    <div class="container">
+
+      <div class="page-header">
+        <h1 class="page-title">Manage Providers</h1>
+        <p class="page-subtitle">Review and manage provider applications</p>
+      </div>
+
+      <div class="tabs mb-6" id="filter-tabs">
+        <button class="tab-link active" data-filter="">All</button>
+        <button class="tab-link" data-filter="pending">Pending</button>
+        <button class="tab-link" data-filter="approved">Approved</button>
+        <button class="tab-link" data-filter="rejected">Rejected</button>
+      </div>
+
+      <div id="providers-list">
+        <div class="skeleton skeleton-card" style="height:120px;margin-bottom:var(--sp-4)"></div>
+        <div class="skeleton skeleton-card" style="height:120px;margin-bottom:var(--sp-4)"></div>
+        <div class="skeleton skeleton-card" style="height:120px"></div>
+      </div>
+
+      <div id="empty-state" class="hidden">
+        <div class="empty-state">
+          <div class="empty-icon">&#128100;</div>
+          <h3 class="empty-title">No Providers Found</h3>
+          <p class="empty-desc">No providers match the current filter.</p>
+        </div>
+      </div>
+
+      <div class="pagination mt-8" id="pagination"></div>
+
+    </div>
+  </main>
+
+  <div id="app-footer"></div>
+
+  <script src="../assets/js/api.js"></script>
+  <script src="../assets/js/components.js"></script>
+  <script src="../assets/js/admin-providers.js"></script>
+</body>
+</html>
