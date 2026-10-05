@@ -1,14 +1,19 @@
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Edit Provider Profile — SewaConnect</title>
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-  <link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@400;500;600;700&family=DM+Sans:wght@400;500;700&display=swap" rel="stylesheet">
+  <link
+    href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@400;500;600;700&family=DM+Sans:wght@400;500;700&display=swap"
+    rel="stylesheet">
   <link rel="stylesheet" href="../assets/css/style.css">
+  <link rel="stylesheet" href="https://unpkg.com/leaflet/dist/leaflet.css" />
 </head>
+
 <body>
 
   <div id="app-topbar"></div>
@@ -29,10 +34,13 @@
 
       <div id="profile-form-wrapper" class="hidden">
         <div class="card mb-6">
-          <div class="card-header"><h3>Profile Photo</h3></div>
+          <div class="card-header">
+            <h3>Profile Photo</h3>
+          </div>
           <div class="card-body">
             <div style="display:flex;align-items:center;gap:var(--sp-6);">
-              <div id="ep-avatar-preview" style="width:120px;height:120px;border-radius:var(--radius-full);overflow:hidden;flex-shrink:0;display:flex;align-items:center;justify-content:center;background:var(--bg-secondary);">
+              <div id="ep-avatar-preview"
+                style="width:120px;height:120px;border-radius:var(--radius-full);overflow:hidden;flex-shrink:0;display:flex;align-items:center;justify-content:center;background:var(--bg-secondary);">
               </div>
               <div>
                 <div class="form-group" style="margin-bottom:var(--sp-2);">
@@ -46,7 +54,9 @@
         </div>
 
         <div class="card mb-6">
-          <div class="card-header"><h3>Personal Info</h3></div>
+          <div class="card-header">
+            <h3>Personal Info</h3>
+          </div>
           <div class="card-body">
             <div style="display:grid;grid-template-columns:1fr 1fr;gap:var(--sp-4);">
               <div class="form-group">
@@ -66,7 +76,9 @@
         </div>
 
         <div class="card mb-6">
-          <div class="card-header"><h3>Provider Details</h3></div>
+          <div class="card-header">
+            <h3>Provider Details</h3>
+          </div>
           <div class="card-body">
             <div class="form-group">
               <label for="ep-bio">Bio</label>
@@ -90,7 +102,9 @@
         </div>
 
         <div class="card mb-6">
-          <div class="card-header"><h3>Working Hours</h3></div>
+          <div class="card-header">
+            <h3>Working Hours</h3>
+          </div>
           <div class="card-body">
             <div style="display:grid;grid-template-columns:1fr 1fr;gap:var(--sp-4);margin-bottom:var(--sp-4);">
               <div class="form-group">
@@ -117,8 +131,10 @@
           </div>
         </div>
 
-        <div class="card mb-6">
-          <div class="card-header"><h3>Location</h3></div>
+        <!-- <div class="card mb-6">
+          <div class="card-header">
+            <h3>Location</h3>
+          </div>
           <div class="card-body">
             <div class="form-group">
               <label for="ep-address">Address</label>
@@ -126,12 +142,60 @@
             </div>
             <input type="hidden" id="ep-latitude" value="">
             <input type="hidden" id="ep-longitude" value="">
-            <button type="button" class="btn btn-ghost btn-sm mb-4" id="ep-get-location">&#128205; Use My Current Location</button>
+            <button type="button" class="btn btn-ghost btn-sm mb-4" id="ep-get-location">&#128205; Use My Current
+              Location</button>
+          </div>
+        </div> -->
+        <div class="card mb-6">
+          <div class="card-header">
+            <h3>Location</h3>
+          </div>
+
+          <div class="card-body">
+
+            <div class="form-group">
+              <label for="ep-address">Address</label>
+
+              <input type="text" id="ep-address" class="form-input" placeholder="Your business address">
+            </div>
+
+
+            <input type="hidden" id="ep-latitude" value="">
+
+
+            <input type="hidden" id="ep-longitude" value="">
+
+            <input id="provider-location-search" class="form-input" placeholder="Search new location">
+
+            <!-- Leaflet map -->
+            <div id="provider-map" style="
+        height:350px;
+        width:100%;
+        border-radius:12px;
+        margin:15px 0;
+      ">
+            </div>
+
+
+
+            <button type="button" class="btn btn-ghost btn-sm mb-4" id="ep-get-location">
+
+              &#128205; Use My Current Location
+
+            </button>
+
+
+            <small class="text-muted">
+              Drag the marker or click on the map to update your location.
+            </small>
+
+
           </div>
         </div>
-
         <div class="card mb-6">
-          <div class="card-header"><h3>Documents</h3></div>
+          <div class="card-header">
+            <h3>Documents</h3>
+          </div>
           <div class="card-body">
             <div style="display:grid;grid-template-columns:1fr 1fr;gap:var(--sp-6);">
               <div class="form-group">
@@ -164,6 +228,8 @@
 
   <script src="../assets/js/api.js"></script>
   <script src="../assets/js/components.js"></script>
+  <script src="https://unpkg.com/leaflet/dist/leaflet.js"></script>
   <script src="../assets/js/edit-provider-profile.js"></script>
 </body>
+
 </html>

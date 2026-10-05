@@ -29,16 +29,22 @@
   /* --------------------------------
      Init
   -------------------------------- */
+  // async function init() {
+  //   loadCategoriesFromUrl();
+  //   await getUserLocation();
+  //   loadFromUrlParams();
+  //   performSearch();
+  // }
   async function init() {
-    loadCategoriesFromUrl();
+    await loadCategoriesForFilter();
     await getUserLocation();
     loadFromUrlParams();
-    performSearch();
+    await performSearch();
   }
 
-  function loadCategoriesFromUrl() {
-    loadCategoriesForFilter();
-  }
+  // function loadCategoriesFromUrl() {
+  //   loadCategoriesForFilter();
+  // }
 
   async function loadCategoriesForFilter() {
     const data = await apiFetch("/categories/");
@@ -80,25 +86,77 @@
   /* --------------------------------
      Search
   -------------------------------- */
+  // async function performSearch() {
+  //   showLoading();
+
+  //   const params = new URLSearchParams();
+  //   const q = searchInput.value.trim();
+  //   // const category = filterCategory.value;
+  //   const urlParams = new URLSearchParams(window.location.search);
+  //   const category = urlParams.get("category") || filterCategory.value;
+
+  //   const city = filterCity.value.trim();
+  //   const maxPrice = filterMaxPrice.value;
+  //   const experience = filterExperience.value;
+  //   const availability = filterAvailability.value;
+
+  //   if (q) params.set("q", q);
+  //   if (category) params.set("category", category);
+  //   if (city) params.set("city", city);
+  //   if (maxPrice && Number(maxPrice) < 5000) params.set("max_price", maxPrice);
+  //   if (experience) params.set("experience", experience);
+  //   if (availability) params.set("availability", availability);
+  //   if (userLat) params.set("lat", userLat);
+  //   if (userLon) params.set("lon", userLon);
+
+  //   const data = await apiFetch(`/search/?${params.toString()}`);
+
+  //   if (!data || data.error) {
+  //     allResults = [];
+  //     renderResults([]);
+  //     return;
+  //   }
+
+  //   allResults = data.results || [];
+  //   currentPage = 1;
+  //   sortResults();
+  //   renderResults(allResults);
+  // }
   async function performSearch() {
     showLoading();
 
     const params = new URLSearchParams();
+
     const q = searchInput.value.trim();
-    const category = filterCategory.value;
+
+    // Read category directly from URL first
+    const urlParams = new URLSearchParams(window.location.search);
+    const category = urlParams.get("category") || filterCategory.value;
+
     const city = filterCity.value.trim();
     const maxPrice = filterMaxPrice.value;
     const experience = filterExperience.value;
     const availability = filterAvailability.value;
 
     if (q) params.set("q", q);
-    if (category) params.set("category", category);
+
+    if (category) {
+      params.set("category", category);
+    }
+
     if (city) params.set("city", city);
-    if (maxPrice && Number(maxPrice) < 5000) params.set("max_price", maxPrice);
+    if (maxPrice && Number(maxPrice) < 5000) {
+      params.set("max_price", maxPrice);
+    }
     if (experience) params.set("experience", experience);
     if (availability) params.set("availability", availability);
-    if (userLat) params.set("lat", userLat);
-    if (userLon) params.set("lon", userLon);
+
+    if (userLat != null) params.set("lat", userLat);
+    if (userLon != null) params.set("lon", userLon);
+
+    console.log("URL category:", urlParams.get("category"));
+    console.log("Selected category:", filterCategory.value);
+    console.log("Sending search params:", params.toString());
 
     const data = await apiFetch(`/search/?${params.toString()}`);
 
@@ -110,10 +168,10 @@
 
     allResults = data.results || [];
     currentPage = 1;
+
     sortResults();
     renderResults(allResults);
   }
-
   /* --------------------------------
      Sort
   -------------------------------- */
@@ -360,7 +418,23 @@
     performSearch();
   });
 
+  // filterCategory.addEventListener("change", () => {
+  //   currentPage = 1;
+  //   performSearch();
+  // });
   filterCategory.addEventListener("change", () => {
+    const category = filterCategory.value;
+
+    const url = new URL(window.location.href);
+
+    if (category) {
+      url.searchParams.set("category", category);
+    } else {
+      url.searchParams.delete("category");
+    }
+
+    window.history.replaceState({}, "", url);
+
     currentPage = 1;
     performSearch();
   });

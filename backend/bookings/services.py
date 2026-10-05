@@ -158,20 +158,80 @@ def reassign_expired_provider(booking):
 
 
 @transaction.atomic
+# def accept_booking(booking, provider_user):
+#     """Provider accepts a booking."""
+#     if booking.status != 'pending':
+#         return False, 'Booking is not in pending status.'
+
+#     if booking.provider.user != provider_user:
+#         return False, 'You are not assigned to this booking.'
+
+#     has_conflict, conflict_booking = check_booking_conflict(
+#         booking.provider, booking.booking_date, booking.booking_time, exclude_booking_id=booking.id
+#     )
+#     if has_conflict:
+#         return False, f'Conflicting booking exists (Booking #{conflict_booking.booking_code}).'
+
+#     booking.status = 'accepted'
+#     booking.assignment_expiry = None
+#     booking.save()
+
+#     BookingStatusLog.objects.create(
+#         booking=booking,
+#         status='accepted',
+#         changed_by=provider_user,
+#     )
+
+#     create_notification(
+#         recipient=booking.customer,
+#         sender=provider_user,
+#         title='Booking Accepted',
+#         message=f'Your booking {booking.booking_code} has been accepted.',
+#         type='booking',
+#         reference_id=booking.id,
+#     )
+#     return True, 'Booking accepted successfully.'
+
+@transaction.atomic
 def accept_booking(booking, provider_user):
     """Provider accepts a booking."""
+
+    # 1. Booking must still be pending
     if booking.status != 'pending':
         return False, 'Booking is not in pending status.'
+
+    # 2. Make sure this provider is assigned
+    if not booking.provider:
+        return False, 'No provider is assigned to this booking.'
 
     if booking.provider.user != provider_user:
         return False, 'You are not assigned to this booking.'
 
-    has_conflict, conflict_booking = check_booking_conflict(
-        booking.provider, booking.booking_date, booking.booking_time, exclude_booking_id=booking.id
-    )
-    if has_conflict:
-        return False, f'Conflicting booking exists (Booking #{conflict_booking.booking_code}).'
+    # 3. IMPORTANT: Check assignment expiry
+    if (
+        booking.assignment_expiry
+        and timezone.now() >= booking.assignment_expiry
+    ):
+        # Automatically try to assign another provider
+        reassign_expired_provider(booking)
 
+        return False, 'This booking request has expired and has been reassigned.'
+
+    # 4. Check provider booking conflict
+    has_conflict, conflict_booking = check_booking_conflict(
+        booking.provider,
+        booking.booking_date,
+        booking.booking_time,
+        exclude_booking_id=booking.id
+    )
+
+    if has_conflict:
+        return False, (
+            f'Conflicting booking exists '
+            f'(Booking #{conflict_booking.booking_code}).'
+        )
+
+    # 5. Accept booking
     booking.status = 'accepted'
     booking.assignment_expiry = None
     booking.save()
@@ -190,8 +250,8 @@ def accept_booking(booking, provider_user):
         type='booking',
         reference_id=booking.id,
     )
-    return True, 'Booking accepted successfully.'
 
+    return True, 'Booking accepted successfully.'
 
 @transaction.atomic
 def reject_booking(booking, provider_user, reason=''):
@@ -233,25 +293,52 @@ def reject_booking(booking, provider_user, reason=''):
 
     assigned = assign_best_provider(booking)
 
+    # if not assigned:
+    #     booking.status = 'waiting'
+    #     booking.assignment_expiry = None
+    #     booking.save()
+
+    #     BookingStatusLog.objects.create(
+    #         booking=booking,
+    #         status='waiting',
+    #         note='No more providers available.',
+    #     )
+
+    #     create_notification(
+    #         recipient=booking.customer,
+    #         title='No Provider Available',
+    #         message=f'No provider could be assigned for booking {booking.booking_code}.',
+    #         type='system',
+    #         reference_id=booking.id,
+    #     )
     if not assigned:
-        booking.status = 'waiting'
+        booking.status = 'cancelled'
         booking.assignment_expiry = None
+        booking.cancellation_reason = (
+            'Booking automatically cancelled because no available '
+            'provider accepted the request within the assignment timeout.'
+        )
         booking.save()
 
         BookingStatusLog.objects.create(
             booking=booking,
-            status='waiting',
-            note='No more providers available.',
+            status='cancelled',
+            note=(
+                'Booking automatically cancelled. '
+                'No available provider accepted the request.'
+            ),
         )
 
         create_notification(
             recipient=booking.customer,
-            title='No Provider Available',
-            message=f'No provider could be assigned for booking {booking.booking_code}.',
+            title='Booking Cancelled',
+            message=(
+                f'Your booking {booking.booking_code} was automatically '
+                f'cancelled because no provider was available.'
+            ),
             type='system',
             reference_id=booking.id,
         )
-
     return True, 'Booking rejected and reassignment attempted.'
 
 

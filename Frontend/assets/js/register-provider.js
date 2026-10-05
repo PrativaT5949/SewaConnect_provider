@@ -29,6 +29,9 @@
   const strengthFill = document.getElementById("prov-strength-fill");
   const strengthText = document.getElementById("prov-strength-text");
   const locationBtn = document.getElementById("prov-get-location");
+  let map;
+  let marker;
+  const searchInput = document.getElementById("provider-location-search");
 
   function setLoading(loading) {
     submitBtn.disabled = loading;
@@ -100,16 +103,49 @@
 
     const pos = await getCurrentPosition();
 
+    // if (pos) {
+    //   latInput.value = pos.lat;
+    //   lonInput.value = pos.lon;
+    //   locationStatus.textContent = `Location captured (${pos.lat.toFixed(4)}, ${pos.lon.toFixed(4)})`;
+    //   locationStatus.style.color = "var(--success)";
+
+    //   const resolved = await reverseGeocode(pos.lat, pos.lon);
+    //   if (resolved && !address.value.trim()) {
+    //     address.value = resolved;
+    //   }
     if (pos) {
       latInput.value = pos.lat;
       lonInput.value = pos.lon;
-      locationStatus.textContent = `Location captured (${pos.lat.toFixed(4)}, ${pos.lon.toFixed(4)})`;
-      locationStatus.style.color = "var(--success)";
+
+      if (!marker) {
+        marker = L.marker([pos.lat, pos.lon], {
+          draggable: true,
+        }).addTo(map);
+
+        marker.on("dragend", async function () {
+          const p = marker.getLatLng();
+
+          latInput.value = p.lat.toFixed(6);
+          lonInput.value = p.lng.toFixed(6);
+
+          const addr = await reverseGeocode(p.lat, p.lng);
+
+          if (addr) address.value = addr;
+        });
+      } else {
+        marker.setLatLng([pos.lat, pos.lon]);
+      }
+
+      map.setView([pos.lat, pos.lon], 16);
 
       const resolved = await reverseGeocode(pos.lat, pos.lon);
-      if (resolved && !address.value.trim()) {
+
+      if (resolved) {
         address.value = resolved;
       }
+
+      locationStatus.textContent = "Location captured successfully.";
+      locationStatus.style.color = "green";
     } else {
       locationStatus.textContent =
         "Could not get location. Please enter your address manually.";
@@ -119,6 +155,49 @@
     locationBtn.disabled = false;
     locationBtn.innerHTML = "&#128205; Get My Location";
   });
+  /* ============================
+   Leaflet Map
+============================ */
+
+  function initMap() {
+    map = L.map("provider-map").setView([27.7172, 85.324], 13);
+
+    L.tileLayer("https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png", {
+      attribution: "&copy; OpenStreetMap contributors",
+    }).addTo(map);
+
+    map.on("click", async function (e) {
+      const { lat, lng } = e.latlng;
+
+      if (marker) {
+        marker.setLatLng(e.latlng);
+      } else {
+        marker = L.marker(e.latlng, {
+          draggable: true,
+        }).addTo(map);
+
+        marker.on("dragend", async function () {
+          const pos = marker.getLatLng();
+
+          latInput.value = pos.lat.toFixed(6);
+          lonInput.value = pos.lng.toFixed(6);
+
+          const addr = await reverseGeocode(pos.lat, pos.lng);
+
+          if (addr) address.value = addr;
+        });
+      }
+
+      latInput.value = lat.toFixed(6);
+      lonInput.value = lng.toFixed(6);
+
+      const addr = await reverseGeocode(lat, lng);
+
+      if (addr) {
+        address.value = addr;
+      }
+    });
+  }
 
   /* Form Submit */
   form.addEventListener("submit", async (e) => {
@@ -266,7 +345,8 @@
 
       if (hasAvatar) {
         const userFormData = new FormData();
-        if (address.value.trim()) userFormData.append("address", address.value.trim());
+        if (address.value.trim())
+          userFormData.append("address", address.value.trim());
         if (latInput.value) userFormData.append("latitude", latInput.value);
         if (lonInput.value) userFormData.append("longitude", lonInput.value);
         userFormData.append("avatar", avatarInput.files[0]);
@@ -310,4 +390,68 @@
   if (isLoggedIn()) {
     redirectToDashboard();
   }
+
+  /* Initialize Leaflet Map */
+  document.addEventListener("DOMContentLoaded", () => {
+    initMap();
+  });
+
+  searchInput.addEventListener("keydown", async (e) => {
+    if (e.key !== "Enter") return;
+
+    e.preventDefault();
+
+    const query = searchInput.value.trim();
+
+    if (!query) return;
+
+    try {
+      const res = await fetch(
+        `https://nominatim.openstreetmap.org/search?format=json&q=${encodeURIComponent(query)}`,
+      );
+
+      const data = await res.json();
+
+      if (!data.length) {
+        locationStatus.textContent = "Location not found.";
+        return;
+      }
+
+      const place = data[0];
+
+      const lat = parseFloat(place.lat);
+      const lon = parseFloat(place.lon);
+
+      map.setView([lat, lon], 16);
+
+      if (marker) {
+        marker.setLatLng([lat, lon]);
+      } else {
+        marker = L.marker([lat, lon], {
+          draggable: true,
+        }).addTo(map);
+
+        marker.on("dragend", async function () {
+          const pos = marker.getLatLng();
+
+          latInput.value = pos.lat.toFixed(6);
+          lonInput.value = pos.lng.toFixed(6);
+
+          const addr = await reverseGeocode(pos.lat, pos.lng);
+
+          if (addr) address.value = addr;
+        });
+      }
+
+      latInput.value = lat;
+      lonInput.value = lon;
+      address.value = place.display_name;
+    } catch (err) {
+      console.error(err);
+    }
+  });
+
+  setTimeout(() => {
+    map.invalidateSize();
+  }, 100);
 })();

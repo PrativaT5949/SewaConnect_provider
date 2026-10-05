@@ -10,7 +10,7 @@ from reviews.models import Review
 from .models import RecommendationScore
 
 
-# Configurable weights — can be overridden via Django settings
+# Configurable weights 
 RECOMMENDATION_WEIGHTS = getattr(settings, 'RECOMMENDATION_WEIGHTS', {
     'distance': 0.20,
     'rating': 0.25,
@@ -45,22 +45,21 @@ def haversine_distance(lat1, lon1, lat2, lon2):
 
 
 def score_distance(distance_km):
-    """Closer = higher score. 0km = 100, >=50km = 0."""
+   
     return max(0, (1 - distance_km / MAX_DISTANCE_KM)) * 100
 
 
 def score_rating(average_rating):
-    """Rating 0-5 mapped to 0-100."""
+    
     return (float(average_rating) / 5.0) * 100
 
 
 def score_experience(years):
-    """More experience = higher score, capped at 20 years."""
+    
     return min(years / MAX_EXPERIENCE_YEARS, 1.0) * 100
 
 
 def score_price(hourly_rate, target_price=None):
-    """Lower price = higher score. If target_price provided, closest to target wins."""
     rate = float(hourly_rate)
     if target_price and target_price > 0:
         diff = abs(rate - target_price) / target_price
@@ -69,7 +68,6 @@ def score_price(hourly_rate, target_price=None):
 
 
 def score_availability(provider):
-    """Check if provider is available today and has working days configured."""
     today = date.today()
     day_abbr = ['mon', 'tue', 'wed', 'thu', 'fri', 'sat', 'sun'][today.weekday()]
 

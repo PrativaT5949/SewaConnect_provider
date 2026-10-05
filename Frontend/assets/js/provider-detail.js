@@ -32,12 +32,27 @@
     await loadProvider();
   }
 
+  // async function loadProvider() {
+  //   const data = await apiFetch(`/providers/${providerId}/`);
+  //   if (!data || data.error) {
+  //     showError();
+  //     return;
+  //   }
   async function loadProvider() {
     const data = await apiFetch(`/providers/${providerId}/`);
+
+    console.log("Provider Data:", data); // <-- Add this line
+    console.log("Services:", data.services);
+    console.log("First Service:", data.services[0]);
+
     if (!data || data.error) {
       showError();
       return;
     }
+
+    providerData = data;
+
+    providerData = data;
 
     providerData = data;
     renderHeader(data);
@@ -70,6 +85,10 @@
     const verified = p.is_verified;
     const location = p.location || p.city || "";
     const district = p.district || "";
+    const firstService = p.services?.[0];
+    const bookUrl = firstService
+      ? `booking-create.html?provider=${providerId}&service=${firstService.id}&category=${firstService.category}`
+      : "#";
 
     headerEl.innerHTML = `
       ${
@@ -97,7 +116,11 @@
             : ""
         }
         <div class="provider-actions">
-          <a href="booking-create.html?provider=${providerId}" class="btn btn-primary">Book Now</a>
+        ${
+          firstService
+            ? `<a href="${bookUrl}" class="btn btn-primary">Book Now</a>`
+            : `<button class="btn btn-primary" disabled>No Service Available</button>`
+        }
           <button class="btn btn-outline" id="favorite-btn">&#9825; Add to Favorites</button>
         </div>
       </div>
@@ -213,10 +236,19 @@
 
   function renderSidebar(p) {
     const price = p.hourly_rate || p.min_price || 0;
+    const firstService = p.services?.[0];
+
+    const bookUrl = firstService
+      ? `booking-create.html?provider=${providerId}&service=${firstService.id}&category=${firstService.category}`
+      : "#";
     sidebarContent.innerHTML = `
       <h4 style="margin-bottom:var(--sp-4);">Interested?</h4>
       ${price ? `<p style="font-size:1.2rem;font-weight:700;color:var(--primary);margin-bottom:var(--sp-4);">${formatCurrency(price)} <span class="fs-sm fw-400 text-muted">/hr</span></p>` : ""}
-      <a href="booking-create.html?provider=${providerId}" class="btn btn-primary w-full btn-lg mb-3">Book Now</a>
+     ${
+       firstService
+         ? `<a href="${bookUrl}" class="btn btn-primary">Book Now</a>`
+         : `<button class="btn btn-primary" disabled>No Service Available</button>`
+     }
       <button class="btn btn-outline w-full" id="sidebar-fav-btn">&#9825; Add to Favorites</button>
       <div style="margin-top:var(--sp-6);padding-top:var(--sp-4);border-top:1px solid var(--border);text-align:left;">
         <div class="fs-sm text-muted mb-2"><strong>Response time:</strong> Usually within 1 hour</div>
