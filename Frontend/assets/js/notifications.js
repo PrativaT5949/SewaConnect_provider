@@ -65,7 +65,7 @@
                   <span class="fw-600 ${isRead ? 'text-muted' : ''}">${title}</span>
                   <span class="fs-sm text-muted" style="flex-shrink:0;">${date ? timeAgo(date) : ''}</span>
                 </div>
-                <p class="text-secondary fs-sm" style="margin:0;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;">${message}</p>
+                <p class="text-secondary fs-sm" style="margin:0;">${message}</p>
               </div>
               ${!isRead ? '<div style="width:8px;height:8px;border-radius:50%;background:var(--accent);flex-shrink:0;"></div>' : ''}
             </div>

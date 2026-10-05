@@ -166,5 +166,5 @@ CELERY_BEAT_SCHEDULE = {
 
 # Booking assignment timeout (seconds)
 BOOKING_ASSIGNMENT_TIMEOUT_MINUTES = config(
-    'BOOKING_ASSIGNMENT_TIMEOUT_MINUTES', default=30, cast=int
+    'BOOKING_ASSIGNMENT_TIMEOUT_MINUTES', default=5, cast=int
 )
